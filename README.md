@@ -1,4 +1,4 @@
-# Request Creation App
+# CampusFlow (A Request Creation/Management App)
 ### This is a project for raising a request to the college authorities.
 Requests like organinsing events, booking halls for talks, reimbursement etc can be raised.
 ## Problem Statement
