@@ -1,39 +1,91 @@
-# CampusFlow (A Request Creation/Management App)
-### This is a project for raising a request to the college authorities.
-Requests like organinsing events, booking halls for talks, reimbursement etc can be raised.
-## Problem Statement
-Everytime there was an event was to be organised in college or someone had to book lecture hall for talks, seminars etc, students of the council had to run from one corner of the college to the other for signatures of the authorities. And at times, couldn't find the authorities in their designated office. Also, if there was some minute mistake they had to get back to the head of the council to rewrite the application.
-This whole manual process was a tedious task. And sometimes that paper applications would get lost in the records resulting in last minute hassles.
+# CampusFlow — A Campus Request Management App
 
-## Solution
-This best way to ease out this whole process was to *digitise* this and create such an interface that could be accessed from anywhere without the hassle of running from one office to the other. The way I went ahead with was to create an android app with 3 different interfaces
-1. For students
-2. For authorities
-3. For admin (Director)
+> From "I need to find the Dean" to "request submitted" in 30 seconds.
 
-### Implementation
-#### For Students
-* The Students can log in with their college email id.
-* Choose from a variety of pre-established categories.
-* Enter the start and end date.
-* Enter some optional information, like "required 10 tables" etc.
-* Request gets to the authenticator at level 1 of the category of the request.
-* Student can check the status of the request, i.e when was it last updated, who is delaying the request, etc.
+An Android application that **digitizes the college approval workflow** — events, hall bookings, reimbursements — replacing paper forms and physical signatures with a multi-level digital authorization chain.
 
-#### For Authorities
-* Different authorities can authorize requests from different categories and at different levels of authorization.
-  - For instance, the same person can be the only authority for category C1 and for another category C2 another authorizer's signature might be required before his'. So Each authorizer has some categories assigned to them with a level assigned to each category.
-* Authorities have the choice of either accepting or rejecting a request and provide some additional(optional) feedback.
-* The authority can not see the request once they accept or reject it.
-* Whenever the state of the request is changed, i.e. it gets accepted or rejected by some authority, the status of the request gets updated.
+## Problem it solves
 
-#### For ADMIN
-* Admin can authorise any request.
-* They have the rights to see history of every request that was ever created.
+Organizing a college event meant chasing down signatures from authorities scattered across campus, re-writing applications for minor errors, and watching paper forms disappear into filing cabinets. CampusFlow replaces all of that with a mobile app accessible from anywhere.
 
+## What it does
 
-### Under development
-* Admin functionalities
-* UI
-* Sub-categories
-* Currently only accepts date and not time for request.
+Three distinct interfaces for three roles:
+
+### Students
+- Log in with college email
+- Choose a request category (event, hall booking, reimbursement, etc.)
+- Set start/end dates and add optional details
+- Submit — the request automatically routes to the first authority in the chain
+- Track real-time status: who has it, who approved, who's the bottleneck
+
+### Authorities
+- Each authority is assigned categories and authorization levels
+- View pending requests in their queue; accept or reject with optional feedback
+- Once actioned, the request either advances to the next authority level or is closed
+- Completed requests disappear from the authority's view
+
+### Admin (Director)
+- Can authorize any request regardless of category or level
+- Full historical view of every request ever submitted
+
+## Tech stack
+
+- **Android** (Java)
+- **Firebase** — authentication (college email login) and real-time database
+- **Fragment-based navigation** — `LoginFragment`, `SignUpFragment`, and role-specific fragments
+
+## Getting started
+
+### Prerequisites
+
+- Android Studio (Hedgehog or later recommended)
+- Android SDK 21+
+- A Firebase project with Authentication and Realtime Database enabled
+
+### Setup
+
+1. Clone the repo.
+2. Open `AndroidSide/` in Android Studio.
+3. Create a Firebase project at [console.firebase.google.com](https://console.firebase.google.com).
+4. Enable **Email/Password** authentication.
+5. Download `google-services.json` from your Firebase project and place it in `AndroidSide/applicationcreator/`.
+6. Sync Gradle.
+
+### Run
+
+- Connect an Android device or start an emulator (API 21+).
+- Click **Run ▶** in Android Studio, or:
+
+```bash
+./gradlew assembleDebug
+adb install AndroidSide/app/build/outputs/apk/debug/app-debug.apk
+```
+
+## Project structure
+
+```
+AndroidSide/applicationcreator/
+├── MainActivity.java          # host activity + nav controller
+├── LoginFragment.java         # login screen
+├── SignUpFragment.java        # sign-up screen
+├── FirstFragment.java         # student home
+├── SecondFragment.java        # request creation
+├── ThirdFragment.java         # request status view
+├── FourthFragment.java        # authority queue
+├── FifthFragment.java         # admin view
+└── web/
+    ├── Authenticator.java     # Firebase auth wrapper
+    ├── ApplicationManager.java# request CRUD via Firebase DB
+    ├── Application.java       # request domain object
+    ├── ApplicationBuilder.java
+    ├── Category.java          # request category model
+    └── CurrentUser.java       # session user state
+```
+
+## Under development
+
+- Admin permission management UI
+- Sub-categories for finer request routing
+- Time-of-day support (currently date-only)
+- Full UI polish
